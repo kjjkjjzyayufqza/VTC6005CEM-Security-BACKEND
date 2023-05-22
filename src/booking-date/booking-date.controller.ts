@@ -14,7 +14,7 @@ import { UpdateBookingDateDto } from './dto/update-booking-date.dto';
 import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BookingDate } from './booking-date.schema';
 
-@ApiTags('bookingDate')
+@ApiTags('booking')
 @Controller('bookingDate')
 export class BookingDateController {
   constructor(private readonly bookingDateService: BookingDateService) {}

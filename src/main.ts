@@ -12,6 +12,20 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
   const config = new DocumentBuilder()
     .setTitle('Cats example')
+    .addOAuth2({
+      type: 'oauth2',
+      flows: {
+        authorizationCode: {
+          authorizationUrl: 'http://localhost:3000/auth/login',
+          tokenUrl: 'http://localhost:3000/auth/login',
+          scopes: {
+            read: 'Read Kitty Data',
+            write: 'Write Kitty Data',
+            refresh: 'Refresh Access Token',
+          },
+        },
+      },
+    })
     .setDescription('The cats API description')
     .setVersion('1.0')
     .build();

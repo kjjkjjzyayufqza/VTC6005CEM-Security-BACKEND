@@ -9,14 +9,14 @@ import {
   Put,
   Res,
 } from '@nestjs/common';
-import { UserService } from './userBooking.service';
 import { CreateUserDto, UpdateUserDto } from './dto/index.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserBookingService } from './userBooking.service';
 
-@ApiTags('user')
-@Controller('user')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+@ApiTags('booking')
+@Controller('userBooking')
+export class UserBookingController {
+  constructor(private readonly userBookingService: UserBookingService) {}
 
   @Post()
   @ApiOperation({ summary: 'summary goes here' })
@@ -28,7 +28,7 @@ export class UserController {
     },
   })
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.userBookingService.create(createUserDto);
   }
 
   @Put('/:id')
@@ -36,7 +36,7 @@ export class UserController {
     @Param('id') userId: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const existingStudent = await this.userService.updateStudent(
+    const existingStudent = await this.userBookingService.updateStudent(
       userId,
       updateUserDto,
     );
@@ -45,12 +45,12 @@ export class UserController {
 
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.userBookingService.findAll();
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', description: '用户id', required: true })
   findById(@Param('id') id: string) {
-    return this.userService.findAll();
+    return this.userBookingService.findAll();
   }
 }

@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsDate, IsEmail } from 'class-validator';
 import mongoose, { HydratedDocument } from 'mongoose';
 
-export type UserDocument = HydratedDocument<User>;
+export type UserBookingDocument = HydratedDocument<UserBooking>;
 
 export enum RoleEnum {
   Admin = 'Admin',
@@ -20,7 +20,7 @@ export enum VaccineEnum {
 }
 
 @Schema({ versionKey: false })
-export class User {
+export class UserBooking {
   @Prop({ required: true })
   name_en: string;
 
@@ -44,4 +44,4 @@ export class User {
   vaccine_brand: VaccineEnum;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const UserBookingSchema = SchemaFactory.createForClass(UserBooking);

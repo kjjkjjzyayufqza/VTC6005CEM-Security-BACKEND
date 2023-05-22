@@ -1,24 +1,24 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto/index.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './userBookingschema';
 import { Model } from 'mongoose';
+import { UserBooking } from './userBookingschema';
 
 @Injectable()
-export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+export class UserBookingService {
+  constructor(@InjectModel(UserBooking.name) private userBookingModel: Model<UserBooking>) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const createdUser = new this.userModel(createUserDto);
+  async create(createUserDto: CreateUserDto): Promise<UserBooking> {
+    const createdUser = new this.userBookingModel(createUserDto);
     return createdUser.save();
   }
 
   async updateStudent(
     userId: string,
     updateUserDto: UpdateUserDto,
-  ): Promise<User> {
+  ): Promise<UserBooking> {
     if (userId.match(/^[0-9a-fA-F]{24}$/)) {
-      const existingStudent = await this.userModel.findByIdAndUpdate(
+      const existingStudent = await this.userBookingModel.findByIdAndUpdate(
         userId,
         updateUserDto,
       );
@@ -31,8 +31,8 @@ export class UserService {
     }
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  async findAll(): Promise<UserBooking[]> {
+    return this.userBookingModel.find().exec();
   }
   
 }
