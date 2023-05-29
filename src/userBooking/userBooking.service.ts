@@ -50,7 +50,7 @@ export class UserBookingService {
         return 'Done'
       }
     } catch (e) {
-      throw new BadRequestException("Data Error")
+      throw new BadRequestException('Data Error')
     }
     // const createdUser = new this.userBookingModel(createUserDto);
     // return createdUser.save();
@@ -75,8 +75,9 @@ export class UserBookingService {
   }
 
   async findAll (mobile?: any): Promise<UserBooking[]> {
-    let query = {
-      mobile: mobile ? { $in: [mobile] } : {},
+    let query = {}
+    if (mobile) {
+      query = { mobile: { $in: [mobile] } }
     }
     return await this.userBookingModel.find(query).exec()
   }

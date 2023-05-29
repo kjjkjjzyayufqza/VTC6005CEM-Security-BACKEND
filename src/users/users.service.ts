@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { CreateUserDto, UpdateUserDto, UserDto } from './dto/index.dto'
-import { UserDocument, User } from './users.schema'
+import { UserDocument, User, UserRole } from './users.schema'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { JwtService } from '@nestjs/jwt'
@@ -38,6 +38,9 @@ export class UsersService {
   }
 
   async create (createUserDto: CreateUserDto): Promise<UserDocument> {
+    if(createUserDto.role != UserRole.Staff){
+      throw new BadRequestException("Role Error")
+    }
     const createdUser = new this.userModel(createUserDto)
     try {
       await createdUser.save()

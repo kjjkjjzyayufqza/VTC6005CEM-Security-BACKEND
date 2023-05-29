@@ -7,11 +7,15 @@ import {
   Param,
   Delete,
   Query,
+  ParseArrayPipe,
 } from '@nestjs/common'
 import { BookingDateService } from './booking-date.service'
-import { CreateBookingDateDto } from './dto/create-booking-date.dto'
+import {
+  CreateBookingDateDto,
+  CreateUserDto,
+} from './dto/create-booking-date.dto'
 import { UpdateBookingDateDto } from './dto/update-booking-date.dto'
-import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { BookingDate } from './booking-date.schema'
 
 @ApiTags('booking')
@@ -20,8 +24,12 @@ export class BookingDateController {
   constructor (private readonly bookingDateService: BookingDateService) {}
 
   @Post()
-  create (@Body() createBookingDateDto: CreateBookingDateDto) {
-    return this.bookingDateService.create(createBookingDateDto)
+  @ApiBody({ type: [CreateBookingDateDto] })
+  create (
+    @Body(new ParseArrayPipe({ items: CreateBookingDateDto}))
+    createBookingDateDto: CreateBookingDateDto[],
+  ) {
+    return this.bookingDateService.createAll(createBookingDateDto)
   }
 
   @Get()

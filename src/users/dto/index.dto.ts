@@ -1,5 +1,14 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { IsEnum, IsInt, IsString, MaxLength, MinLength } from 'class-validator'
+import {
+  IsEmail,
+  IsEnum,
+  IsInt,
+  IsString,
+  IsStrongPassword,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator'
 import { CreateBookingDateDto } from 'src/booking-date/dto/create-booking-date.dto'
 import { UserRole } from '../users.schema'
 
@@ -21,13 +30,17 @@ export class CreateUserDto {
   @ApiProperty({ required: true })
   name: string
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true, default: 'a@a.com'  })
+  @IsEmail()
   email: string
 
   @ApiProperty({ required: true })
   password: string
 
-  @ApiProperty({ required: true })
+  @ApiProperty({
+    required: true,
+    default: UserRole.Staff,
+  })
   role: UserRole.Staff
 }
 

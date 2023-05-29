@@ -1,7 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 
 export class AuthDto {
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: true,default: "a@a.com" })
   email: string
 
   @ApiProperty({ required: true })

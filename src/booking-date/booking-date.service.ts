@@ -16,6 +16,18 @@ export class BookingDateService {
     return createdUser.save()
   }
 
+  async createAll (createUserDto: CreateBookingDateDto[]): Promise<BookingDate[]> {
+    const createdUserArray = [];
+
+    for (let i = 0; i < createUserDto.length; i++) {
+      const user = createUserDto[i];
+      const createdUser = new this.bookingDateModel(user);
+      const savedUser = await createdUser.save();
+      createdUserArray.push(savedUser);
+    }
+    return createdUserArray
+  }
+
   async find (startTime, endTime, venues): Promise<BookingDate[]> {
     let query = {
       startTime: startTime ? { $gte: new Date(startTime) } : { $exists: true },
