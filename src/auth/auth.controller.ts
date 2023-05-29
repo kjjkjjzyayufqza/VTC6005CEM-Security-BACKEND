@@ -5,29 +5,46 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Request,
   UseGuards,
-} from '@nestjs/common';
-import { AuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
-import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
-import { AuthDto } from './dto/index.dto';
+} from '@nestjs/common'
+import { AuthService } from './auth.service'
+import { ApiBearerAuth, ApiOAuth2, ApiTags } from '@nestjs/swagger'
+import { AuthDto, AuthRefreshDto } from './dto/index.dto'
+import { CreateUserDto, UserDto } from 'src/users/dto/index.dto'
+import { AccessTokenGuard } from 'src/common/guards/accessToken.guard'
+import { AuthGuard } from './auth.guard'
 
 @Controller('auth')
 @ApiTags('authentication')
-@ApiOAuth2(['write', 'read', 'update'])
+// @ApiOAuth2(['write', 'read', 'update'])
+// @UseGuards(AccessTokenGuard)
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor (private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post('login')
-  signIn(@Body() signInDto: AuthDto) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+  @Post('SignUp')
+  signup (@Body() createUserDto: CreateUserDto) {
+    return this.authService.signUp(createUserDto)
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Post('SignIn')
+  signIn (@Body() signInDto: AuthDto) {
+    return this.authService.signIn(signInDto)
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('Refresh')
+  refresh (@Body() refreshDto: AuthRefreshDto) {
+    return this.authService.updateRefreshToken(refreshDto.refreshToken)
+  }
+
+  @Get('logout')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  logout (@Req() request) {
+    this.authService.logout(request.user['sub'])
   }
 }

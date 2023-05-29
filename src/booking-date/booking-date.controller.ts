@@ -7,21 +7,21 @@ import {
   Param,
   Delete,
   Query,
-} from '@nestjs/common';
-import { BookingDateService } from './booking-date.service';
-import { CreateBookingDateDto } from './dto/create-booking-date.dto';
-import { UpdateBookingDateDto } from './dto/update-booking-date.dto';
-import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { BookingDate } from './booking-date.schema';
+} from '@nestjs/common'
+import { BookingDateService } from './booking-date.service'
+import { CreateBookingDateDto } from './dto/create-booking-date.dto'
+import { UpdateBookingDateDto } from './dto/update-booking-date.dto'
+import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { BookingDate } from './booking-date.schema'
 
 @ApiTags('booking')
 @Controller('bookingDate')
 export class BookingDateController {
-  constructor(private readonly bookingDateService: BookingDateService) {}
+  constructor (private readonly bookingDateService: BookingDateService) {}
 
   @Post()
-  create(@Body() createBookingDateDto: CreateBookingDateDto) {
-    return this.bookingDateService.create(createBookingDateDto);
+  create (@Body() createBookingDateDto: CreateBookingDateDto) {
+    return this.bookingDateService.create(createBookingDateDto)
   }
 
   @Get()
@@ -40,12 +40,12 @@ export class BookingDateController {
     type: String,
     required: false,
   })
-  findAll(
+  findAll (
     @Query('startTime') startTime: Date,
     @Query('endTime') endTime: Date,
     @Query('venues') venues: string,
   ): Promise<BookingDate[]> {
-    return this.bookingDateService.find(startTime, endTime, venues);
+    return this.bookingDateService.find(startTime, endTime, venues)
   }
 
   @Get(':id')
@@ -54,12 +54,12 @@ export class BookingDateController {
     type: String,
     required: true,
   })
-  async findById(@Param('id') id: Date,): Promise<BookingDate> {
-    return this.bookingDateService.findById(id);
+  async findById (@Param('id') id: Date): Promise<BookingDate> {
+    return this.bookingDateService.findById(id)
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.bookingDateService.remove(id);
+  remove (@Param('id') id: string) {
+    return this.bookingDateService.remove(id)
   }
 }

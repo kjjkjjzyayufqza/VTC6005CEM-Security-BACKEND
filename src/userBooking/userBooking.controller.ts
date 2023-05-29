@@ -8,15 +8,29 @@ import {
   Delete,
   Put,
   Res,
-} from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from './dto/index.dto';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserBookingService } from './userBooking.service';
+  UseGuards,
+  Query,
+} from '@nestjs/common'
+import {
+  CreateEncryptedUserBookingDto,
+  CreateUserBookingDto,
+  UpdateUserDto,
+} from './dto/index.dto'
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
+import { UserBookingService } from './userBooking.service'
+import { AuthGuard } from 'src/auth/auth.guard'
 
 @ApiTags('booking')
 @Controller('userBooking')
 export class UserBookingController {
-  constructor(private readonly userBookingService: UserBookingService) {}
+  constructor (private readonly userBookingService: UserBookingService) {}
 
   @Post()
   @ApiOperation({ summary: 'summary goes here' })
@@ -27,30 +41,41 @@ export class UserBookingController {
       example: 'hello',
     },
   })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userBookingService.create(createUserDto);
+  create (@Body() createUserDto: CreateEncryptedUserBookingDto) {
+    return this.userBookingService.createEncryptedData(createUserDto)
   }
 
   @Put('/:id')
-  async updateStudent(
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  async updateUserBooking (
     @Param('id') userId: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const existingStudent = await this.userBookingService.updateStudent(
+    const existingUB = await this.userBookingService.updateStudent(
       userId,
       updateUserDto,
-    );
-    return existingStudent;
+    )
+    return existingUB
   }
 
   @Get()
-  findAll() {
-    return this.userBookingService.findAll();
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @ApiQuery({
+    name: 'mobile',
+    type: String,
+    required: false,
+  })
+  findAll (@Query('mobile') mobile: string) {
+    return this.userBookingService.findAll(mobile)
   }
 
   @Get(':id')
-  @ApiParam({ name: 'id', description: '用户id', required: true })
-  findById(@Param('id') id: string) {
-    return this.userBookingService.findAll();
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @ApiParam({ name: 'id', description: '', required: true })
+  findById (@Param('id') id: string) {
+    return this.userBookingService.findAll()
   }
 }

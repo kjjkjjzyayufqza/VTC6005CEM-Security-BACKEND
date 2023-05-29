@@ -1,34 +1,45 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsString, MaxLength, MinLength } from 'class-validator';
-import { GenderEnum, VaccineEnum } from '../userBookingschema';
-import { CreateBookingDateDto } from 'src/booking-date/dto/create-booking-date.dto';
+import { ApiProperty, PartialType } from '@nestjs/swagger'
+import { IsEnum, IsInt, IsString, MaxLength, MinLength } from 'class-validator'
+import { GenderEnum, VaccineEnum } from '../userBookingschema'
+import { CreateBookingDateDto } from 'src/booking-date/dto/create-booking-date.dto'
 
-export class CreateUserDto {
+export class CreateUserBookingDto {
   @ApiProperty({ required: true })
-  nameEn: string;
+  nameEn: string
 
   @ApiProperty({ required: true })
-  nameCn: string;
+  nameCn: string
 
   @ApiProperty({ required: true, default: GenderEnum.Male })
-  gender: GenderEnum;
+  gender: GenderEnum
 
   @ApiProperty({ required: true })
-  birthDate: Date;
+  identityDN: string
 
   @ApiProperty({ required: true })
-  address: string;
+  mobile: string
 
   @ApiProperty({ required: true })
-  birthplace: string;
+  birthDate: Date
 
-  @ApiProperty({ required: true, default: VaccineEnum.Biontech })
-  vaccineBrand: VaccineEnum;
+  @ApiProperty({ required: true })
+  address: string
+
+  @ApiProperty({ required: true })
+  birthplace: string
+
+  @ApiProperty({ required: true, default: VaccineEnum.BioNtech })
+  vaccineBrand: VaccineEnum
 
   @ApiProperty({ required: true, default: { id: '646b4ea2b1313112c47e7f4b' } })
-  bookData: {
-    id: string;
-  };
+  bookDate: {
+    id: string
+  }
 }
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class CreateEncryptedUserBookingDto {
+  @ApiProperty({ required: true })
+  encryptedData: string
+}
+
+export class UpdateUserDto extends PartialType(CreateUserBookingDto) {}

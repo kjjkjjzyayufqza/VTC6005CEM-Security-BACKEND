@@ -1,9 +1,14 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger'
 
 export class AuthDto {
   @ApiProperty({ required: true })
-  username: string;
+  email: string
 
   @ApiProperty({ required: true })
-  password: string;
+  password: string
+}
+
+export class AuthRefreshDto {
+  @ApiProperty({ required: true })
+  refreshToken: string
 }
