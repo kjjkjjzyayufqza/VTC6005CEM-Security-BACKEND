@@ -14,10 +14,15 @@ export class UsersService {
 
   async findCurrent (request) {
     const user = await this.userModel.findById(request.sub).exec()
-    if(!user){
+    if (!user) {
       throw new BadRequestException('User Not Found')
     }
-    const result = { _id: user._id, name: user.name, email: user.email }
+    const result = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    }
     return result
   }
 
@@ -38,8 +43,8 @@ export class UsersService {
   }
 
   async create (createUserDto: CreateUserDto): Promise<UserDocument> {
-    if(createUserDto.role != UserRole.Staff){
-      throw new BadRequestException("Role Error")
+    if (createUserDto.role != UserRole.Staff) {
+      throw new BadRequestException('Role Error')
     }
     const createdUser = new this.userModel(createUserDto)
     try {
